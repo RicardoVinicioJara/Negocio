@@ -62,12 +62,12 @@ public class TelefonoDAO {
 
     public boolean actualizar(Telefono telefono) {
         try {
-            String Query = "UPDATE telefono SET NUMERO = ?,TIPO = ? PERSONA_ID ID = " + telefono.getId();
+            String Query = "UPDATE telefono SET NUMERO = ?,TIPO = ?, PERSONA_ID  = ? WHERE ID = " + telefono.getId();
             PreparedStatement statement = coneccion.prepareStatement(Query);
 
             statement.setString(1, telefono.getNumero());
             statement.setString(2, telefono.getTipo());
-            statement.setInt(3, telefono.getId());
+            statement.setInt(3, telefono.getPersona_id());
             statement.execute();
             return true;
         } catch (SQLException e) {

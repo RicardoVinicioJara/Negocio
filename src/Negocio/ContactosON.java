@@ -70,19 +70,34 @@ public class ContactosON {
             return null;
         }
     }
-    
-    public boolean eliminarPersona(Persona p){
+
+    public boolean eliminarPersona(Persona p) {
         List<Telefono> lista = p.getListaTelefonos();
         for (Telefono t : lista) {
-            if(!eliminarTelefono(t.getId())){
+            if (!eliminarTelefono(t.getId())) {
                 return false;
             }
         }
         return personaDAO.eliminar(p.getId());
-        
+
     }
-    public boolean eliminarTelefono(int id){
+
+    public boolean eliminarTelefono(int id) {
         return telefonoDAO.eliminar(id);
     }
-    
+
+    public boolean actualizarContacto(Persona persona) throws Exception {
+        if (personaDAO.actualizar(persona)) {
+            List<Telefono> listPersonas = persona.getListaTelefonos();
+            for (Telefono list : listPersonas) {
+                if (!telefonoDAO.actualizar(list)) {
+                    throw new Exception("Error al ACTUALIZRA telefono");
+                }
+            }
+        } else {
+            throw new Exception("Error al ACTUALIZRA persona");
+        }
+        return true;
+    }
+
 }

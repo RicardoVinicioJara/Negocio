@@ -26,11 +26,13 @@ public class VistaPersonas extends javax.swing.JFrame {
      */
     private List<Telefono> listTelefono;
     public ContactosON contactosON;
+    private int codAux;
 
     public VistaPersonas() {
         initComponents();
         listTelefono = new ArrayList<>();
         contactosON = new ContactosON();
+        codAux = -500;
     }
 
     /**
@@ -78,9 +80,9 @@ public class VistaPersonas extends javax.swing.JFrame {
         nombre6 = new javax.swing.JLabel();
         txtCedulaB = new javax.swing.JTextField();
         btnEliminar = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tablaContacosB = new javax.swing.JTable();
         btnActualizar = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tablaContacosB = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -185,7 +187,7 @@ public class VistaPersonas extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "NombreyApellido", "Telefono"
+                "ID", "Cedula", "Nombre"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -234,7 +236,7 @@ public class VistaPersonas extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(156, 156, 156)
@@ -256,7 +258,7 @@ public class VistaPersonas extends javax.swing.JFrame {
                 .addComponent(listadeClientes1)
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
 
         panelesCrudCliente.addTab("LISTAR ", jPanel3);
@@ -311,26 +313,6 @@ public class VistaPersonas extends javax.swing.JFrame {
             }
         });
 
-        tablaContacosB.setBackground(new java.awt.Color(204, 255, 255));
-        tablaContacosB.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Telefono", "Tipo"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                true, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tablaContacosB.setEnabled(false);
-        jScrollPane3.setViewportView(tablaContacosB);
-
         btnActualizar.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/actualizar.png"))); // NOI18N
         btnActualizar.setText("ACTUALIZAR");
@@ -341,41 +323,49 @@ public class VistaPersonas extends javax.swing.JFrame {
             }
         });
 
+        tablaContacosB.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "NUMERO", "TIPO"
+            }
+        ));
+        tablaContacosB.setEnabled(false);
+        jScrollPane4.setViewportView(tablaContacosB);
+
         javax.swing.GroupLayout panelBuscarClienteLayout = new javax.swing.GroupLayout(panelBuscarCliente);
         panelBuscarCliente.setLayout(panelBuscarClienteLayout);
         panelBuscarClienteLayout.setHorizontalGroup(
             panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBuscarClienteLayout.createSequentialGroup()
-                .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(32, 32, 32)
+                .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(panelBuscarClienteLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
-                    .addGroup(panelBuscarClienteLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panelBuscarClienteLayout.createSequentialGroup()
-                                .addComponent(jLabel30)
-                                .addGap(18, 18, 18)
-                                .addComponent(nombre2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(txtNombreB, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelBuscarClienteLayout.createSequentialGroup()
-                                .addComponent(nombre6, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(listadeClientes2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCedulaB, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBuscarClienteLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnEliminar)
-                .addGap(101, 101, 101))
-            .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelBuscarClienteLayout.createSequentialGroup()
-                    .addGap(65, 65, 65)
-                    .addComponent(btnActualizar)
-                    .addContainerGap(282, Short.MAX_VALUE)))
+                        .addComponent(nombre2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel30)
+                        .addGap(238, 238, 238))
+                    .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelBuscarClienteLayout.createSequentialGroup()
+                            .addComponent(nombre6, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(29, 29, 29)
+                            .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtCedulaB, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNombreB, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelBuscarClienteLayout.createSequentialGroup()
+                                    .addGap(41, 41, 41)
+                                    .addComponent(listadeClientes2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(panelBuscarClienteLayout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(btnActualizar)
+                            .addGap(87, 87, 87)
+                            .addComponent(btnEliminar))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         panelBuscarClienteLayout.setVerticalGroup(
             panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,21 +380,18 @@ public class VistaPersonas extends javax.swing.JFrame {
                 .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nombre6)
                     .addComponent(txtCedulaB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(listadeClientes2)
-                .addGap(4, 4, 4)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(btnEliminar)
-                .addContainerGap())
-            .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBuscarClienteLayout.createSequentialGroup()
-                    .addContainerGap(248, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelBuscarClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnActualizar)
-                    .addContainerGap()))
+                    .addComponent(btnEliminar))
+                .addGap(196, 196, 196))
         );
 
-        jPanel6.add(panelBuscarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 500, 300));
+        jPanel6.add(panelBuscarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 550, 400));
 
         panelesCrudCliente.addTab("BUSCAR", jPanel6);
 
@@ -416,15 +403,13 @@ public class VistaPersonas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(controladorCliente)
-                        .addGap(151, 151, 151)
-                        .addComponent(jLabel17)
-                        .addGap(28, 28, 28))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelesCrudCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(134, Short.MAX_VALUE))))
+                .addComponent(controladorCliente)
+                .addGap(151, 151, 151)
+                .addComponent(jLabel17)
+                .addGap(28, 28, 28))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelesCrudCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,7 +421,7 @@ public class VistaPersonas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelesCrudCliente))
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38))
+                .addContainerGap())
         );
 
         pack();
@@ -579,6 +564,7 @@ public class VistaPersonas extends javax.swing.JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Persona p = contactosON.buscarPersonaCedula(txtBuscar.getText());
             if (p != null) {
+                codAux = p.getId();
                 txtNombreB.setText(p.getNombre());
                 txtCedulaB.setText(p.getCedula());
                 List<Telefono> lista = p.getListaTelefonos();
@@ -599,7 +585,7 @@ public class VistaPersonas extends javax.swing.JFrame {
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Persona no econtrada");
-                limiparBuscar();
+                limpiarBuscar();
             }
         }
     }//GEN-LAST:event_txtBuscarKeyPressed
@@ -612,13 +598,13 @@ public class VistaPersonas extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(this, "Seguro desea Eliminar") == JOptionPane.OK_OPTION) {
             Persona p = contactosON.buscarPersonaCedula(txtCedulaB.getText());
             if (contactosON.eliminarPersona(p)) {
-                limiparBuscar();
+                limpiarBuscar();
             } else {
                 JOptionPane.showMessageDialog(this, "No se puede eliminar");
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
-    public void limiparBuscar() {
+    public void limpiarBuscar() {
         txtBuscar.setText("");
         txtCedulaB.setText("");
         txtNombreB.setText("");
@@ -631,9 +617,21 @@ public class VistaPersonas extends javax.swing.JFrame {
         if (btnActualizar.getText().equals("ACTUALIZAR")) {
             btnActualizar.setText("GUARDAR");
             btnEliminar.setEnabled(true);
-
+            txtCedulaB.setEditable(true);
+            txtNombreB.setEditable(true);
+            tablaContacosB.setEnabled(true);
         } else {
-            btnActualizar.setText("ACTUALIZAR");
+            Persona p = new Persona(codAux, txtCedulaB.getText(), txtNombreB.getText(), listaTelefonos());
+            try {
+                if (contactosON.actualizarContacto(p)) {
+                    JOptionPane.showMessageDialog(this, "Persona Actualizada");
+                    limpiarBuscar();
+                }else{
+                    JOptionPane.showMessageDialog(this, "Error en Actualizar");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
     public void limpiarCrear() {
@@ -641,6 +639,17 @@ public class VistaPersonas extends javax.swing.JFrame {
         txtCedula.setText("");
         txtNombre.setText("");
         limpiarTelefono();
+    }
+
+    public List<Telefono> listaTelefonos() {
+        List<Telefono> lista = new ArrayList<>();
+        for (int i = 0; i < tablaContacosB.getRowCount(); i++) {
+            int id = (int) tablaContacosB.getValueAt(i, 0);
+            String numero = (String) tablaContacosB.getValueAt(i, 1);
+            String tipo = (String) tablaContacosB.getValueAt(i, 2);
+            lista.add(new Telefono(id, numero, tipo, codAux));
+        }
+        return lista;
     }
 
     public Persona addPersona() {
@@ -719,7 +728,7 @@ public class VistaPersonas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel listadeClientes;
     private javax.swing.JLabel listadeClientes1;
     private javax.swing.JLabel listadeClientes2;
