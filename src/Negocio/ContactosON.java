@@ -10,6 +10,7 @@ import DAO.TelefonoDAO;
 import Entidades.Persona;
 import Entidades.Telefono;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,10 +33,8 @@ public class ContactosON {
                 List<Telefono> listaTelefonos = persona.getListaTelefonos();
                 for (Telefono t : listaTelefonos) {
                     t.setPersona_id(maxId);
-                    if (telefonoDAO.ingresar(t)) {
-                        return true;
-                    } else {
-                        throw new Exception("Error al ingresar Telefono");
+                    if (!telefonoDAO.ingresar(t)) {
+                       throw new Exception("Error al ingresar Telefono");
                     }
                 }
             }
@@ -43,6 +42,24 @@ public class ContactosON {
             throw new Exception("Error al ingresar Persona");
         }
         return true;
+    }
+
+    public List<Persona> listarContactos() {
+        List<Persona> listaPersonas = personaDAO.listar();
+        if (!listaPersonas.isEmpty()) {
+            return listaPersonas;
+        } else {
+            return null;
+        }
+    }
+    
+     public List<Telefono> listarTelefonos(int id) {
+        List<Telefono> listaTelefonos = telefonoDAO.listar(id);
+        if (!listaTelefonos.isEmpty()) {
+            return listaTelefonos;
+        } else {
+            return null;
+        }
     }
 
 }

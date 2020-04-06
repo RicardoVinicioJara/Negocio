@@ -11,6 +11,7 @@ import Negocio.ContactosON;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -60,6 +61,9 @@ public class VistaPersonas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
         listadeClientes = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaContacos = new javax.swing.JTable();
+        listadeClientes1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         buscarclientes = new javax.swing.JLabel();
         txtCedulaB = new javax.swing.JTextField();
@@ -128,7 +132,7 @@ public class VistaPersonas extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         controladorCliente.setFont(new java.awt.Font("Sitka Heading", 2, 24)); // NOI18N
-        controladorCliente.setText("CONTROLADOR CLIENTES");
+        controladorCliente.setText("CONTROLADOR PERSONAS");
 
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clienteP.png"))); // NOI18N
 
@@ -224,64 +228,81 @@ public class VistaPersonas extends javax.swing.JFrame {
         tabla.setBackground(new java.awt.Color(204, 255, 255));
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "NombreyApellido", "Direccion", "Telefono", "Codigo", "Cedula", "aaaaaaaaaa"
+                "ID", "NombreyApellido", "Telefono"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                true, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla);
 
         listadeClientes.setFont(new java.awt.Font("Verdana", 3, 14)); // NOI18N
-        listadeClientes.setText("LISTA DE CLIENTES");
+        listadeClientes.setText("LISTA DE PERSONAS");
+
+        tablaContacos.setBackground(new java.awt.Color(204, 255, 255));
+        tablaContacos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Telefono", "Tipo"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tablaContacos);
+
+        listadeClientes1.setFont(new java.awt.Font("Verdana", 3, 14)); // NOI18N
+        listadeClientes1.setText("CONTACTOS");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(listadeClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(listadeClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(177, 177, 177)
+                .addComponent(listadeClientes1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(listadeClientes)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
-                .addGap(4, 4, 4))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(listadeClientes1)
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         panelesCrudCliente.addTab("LISTAR ", jPanel3);
@@ -1148,41 +1169,36 @@ public class VistaPersonas extends javax.swing.JFrame {
 
     private void panelesCrudClienteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_panelesCrudClienteStateChanged
         int x = panelesCrudCliente.getSelectedIndex();
-        //        if (x == 1) {
-        //            List<Persona> lista = contactosON.findAll();
-        //            if (!lista.isEmpty()) {
-        //                modelotabla = new DefaultTableModel();
-        //                Object[] datoscliente;
-        //                modelotabla.addColumn("ID");
-        //                modelotabla.addColumn("CEDULA");
-        //                modelotabla.addColumn("NOMBRES");
-        //                modelotabla.addColumn("APELLIDOS");
-        //                modelotabla.addColumn("TELEFONO");
-        //                modelotabla.addColumn("DEPARTAMERNTO");
-        //                modelotabla.addColumn("PESO");
-        //                modelotabla.addColumn("ROL");
-        //                tabla.setModel(modelotabla);
-        //                datoscliente = new Object[8];
-        //
-        //                for (Persona persona : lista) {
-        //                    datoscliente[0] = persona.getIdPersona();
-        //                    datoscliente[1] = persona.getCedula();
-        //                    datoscliente[2] = persona.getNombre();
-        //                    datoscliente[3] = persona.getApellido();
-        //                    datoscliente[4] = persona.getCelular();
-        //                    datoscliente[5] = persona.getDepartameto();
-        //                    datoscliente[6] = persona.getPeso();
-        //                    datoscliente[7] = persona.getRol();
-        //                    modelotabla.addRow(datoscliente);
-        //                    tabla.setModel(modelotabla);
-        //                }
-        //
-        //            } else {
-        //                JOptionPane.showMessageDialog(this, "No hay Clientes");
-        //            }
-        //
-        //        }
+        if (x == 1) {
+            limpiarTabla();
+            List<Persona> lista = contactosON.listarContactos();
+            if (lista != null) {
+                DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+                int index = 0;
+                for (Persona u : lista) {
+                    model.insertRow(index, new Object[]{u.getId(), u.getCedula(), u.getNombre()});
+                    index++;
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Lista Vacia");
+            }
+
+        }
     }//GEN-LAST:event_panelesCrudClienteStateChanged
+
+    public void limpiarTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        while (modelo.getRowCount() > 0) {
+            modelo.removeRow(0);
+        }
+    }
+    
+    public void limpiarTablaCotacto() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaContacos.getModel();
+        while (modelo.getRowCount() > 0) {
+            modelo.removeRow(0);
+        }
+    }
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         if (validarPersona()) {
@@ -1199,6 +1215,21 @@ public class VistaPersonas extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnGuardar1ActionPerformed
+
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        List<Telefono> lista = contactosON.listarTelefonos(Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0)+""));
+        limpiarTablaCotacto();
+            if (lista != null) {
+                DefaultTableModel model = (DefaultTableModel) tablaContacos.getModel();
+                int index = 0;
+                for (Telefono u : lista) {
+                    model.insertRow(index, new Object[]{u.getId(), u.getNumero(), u.getTipo()});
+                    index++;
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Esta persona no tiene telefonos");
+            }
+    }//GEN-LAST:event_tablaMouseClicked
     public void limpiarCrear() {
         listTelefono.clear();
         txtCedula.setText("");
@@ -1307,7 +1338,9 @@ public class VistaPersonas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel listadeClientes;
+    private javax.swing.JLabel listadeClientes1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel modificarcliente;
     private javax.swing.JLabel nombre;
@@ -1318,6 +1351,7 @@ public class VistaPersonas extends javax.swing.JFrame {
     private javax.swing.JPanel panelBuscarCliente;
     private javax.swing.JTabbedPane panelesCrudCliente;
     private javax.swing.JTable tabla;
+    private javax.swing.JTable tablaContacos;
     private javax.swing.JLabel telefono;
     private javax.swing.JLabel telefono2;
     private javax.swing.JLabel telefono3;
