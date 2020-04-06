@@ -34,7 +34,7 @@ public class ContactosON {
                 for (Telefono t : listaTelefonos) {
                     t.setPersona_id(maxId);
                     if (!telefonoDAO.ingresar(t)) {
-                       throw new Exception("Error al ingresar Telefono");
+                        throw new Exception("Error al ingresar Telefono");
                     }
                 }
             }
@@ -52,8 +52,8 @@ public class ContactosON {
             return null;
         }
     }
-    
-     public List<Telefono> listarTelefonos(int id) {
+
+    public List<Telefono> listarTelefonos(int id) {
         List<Telefono> listaTelefonos = telefonoDAO.listar(id);
         if (!listaTelefonos.isEmpty()) {
             return listaTelefonos;
@@ -62,4 +62,27 @@ public class ContactosON {
         }
     }
 
+    public Persona buscarPersonaCedula(String cedula) {
+        Persona p = personaDAO.buscarCedula(cedula);
+        if (p != null) {
+            return p;
+        } else {
+            return null;
+        }
+    }
+    
+    public boolean eliminarPersona(Persona p){
+        List<Telefono> lista = p.getListaTelefonos();
+        for (Telefono t : lista) {
+            if(!eliminarTelefono(t.getId())){
+                return false;
+            }
+        }
+        return personaDAO.eliminar(p.getId());
+        
+    }
+    public boolean eliminarTelefono(int id){
+        return telefonoDAO.eliminar(id);
+    }
+    
 }
