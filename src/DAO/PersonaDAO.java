@@ -7,8 +7,7 @@ package DAO;
 
 import Entidades.Persona;
 import Entidades.Telefono;
-import java.awt.Color;
-import java.awt.event.KeyEvent;
+import Utils.MyExpetion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JTextField;
 
 /**
  *
@@ -27,55 +25,68 @@ public class PersonaDAO {
     Conexion con = new Conexion();
     Connection coneccion;
 
-    public PersonaDAO() {
-        coneccion = con.getConnection();
+    public PersonaDAO() throws MyExpetion {
+        try {
+            coneccion = con.getConnection();
+        } catch (MyExpetion e) {
+            throw new MyExpetion("Error de conexion", e.getCause());
+        }
+
     }
-    public int maxId() {
+
+    public int maxId() throws MyExpetion {
         try {
             String sql = "SELECT MAX(id ) FROM persona";
             Statement se = coneccion.createStatement();
             ResultSet seter = se.executeQuery(sql);
             while (seter.next()) {
-                return  seter.getInt(1);
+                return seter.getInt(1);
             }
         } catch (SQLException e) {
-            System.out.println("ERROR: " + e.getMessage() + e.getErrorCode());
-            return 0;
+            throw new MyExpetion("Error MaxID", e.getCause());
         }
         return 0;
     }
 
-    public boolean ingresar(Persona persona) {
+    public void ingresar(Persona persona) throws MyExpetion {
         try {
-            String Query = "INSERT INTO persona(CEDULA,NOMBRE)values(?,?) ";
+            String Query = "INSERT INTO persona(CEDULA,NOMBRE) values(?,?) ";
             PreparedStatement statement = coneccion.prepareStatement(Query);
-
             statement.setString(1, persona.getCedula());
             statement.setString(2, persona.getNombre());
             statement.execute();
-            //coneccion.commit();
-
-            return true;
         } catch (SQLException e) {
-            System.out.println("ERROR: " + e.getMessage() + e.getErrorCode());
-            return false;
+            switch (e.getErrorCode()) {
+                case 1062:
+                    throw new MyExpetion("Cedula ya registrada");
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Erro ingreso Persona", e);
         }
     }
 
-    public boolean eliminar(int id) {
+    public void eliminar(int id) throws MyExpetion {
         try {
             String Query = "DELETE from persona WHERE ID = '" + id + "'";
             Statement se = (Statement) coneccion.createStatement();
             se.executeUpdate(Query);
-            //coneccion.commit();
-            return true;
         } catch (SQLException e) {
-            System.out.println("ERROR: " + e);
-            return false;
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error eliminar Persona", e);
         }
     }
 
-    public boolean actualizar(Persona persona) {
+    public void actualizar(Persona persona) throws MyExpetion {
         try {
             String Query = "UPDATE persona SET CEDULA = ?,NOMBRE = ? WHERE ID = " + persona.getId();
             PreparedStatement statement = coneccion.prepareStatement(Query);
@@ -83,14 +94,19 @@ public class PersonaDAO {
             statement.setString(1, persona.getCedula());
             statement.setString(2, persona.getNombre());
             statement.execute();
-            return true;
         } catch (SQLException e) {
-            System.out.println("ERROR ACT: " + e);
-            return false;
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error actualizar Persona", e);
         }
     }
 
-    public List<Persona> listar() {
+    public List<Persona> listar() throws MyExpetion {
         List<Persona> lista = new ArrayList<>();
         String sql = "select * from persona";
         try {
@@ -114,13 +130,23 @@ public class PersonaDAO {
                 Persona p = new Persona(id, cedula, nombre, listaTelefonos);
                 lista.add(p);
             }
-        } catch (SQLException ex) {
-            System.out.println("Error de lectura :" + ex.getMessage());
+            if(lista.isEmpty()){
+                throw new MyExpetion("Lista Vacia");
+            }
+            return lista;
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error Listar Persona", e);
         }
-        return lista;
     }
 
-    public Persona buscar(int idb) {
+    public Persona buscar(int idb) throws MyExpetion {
         String sql = "select * from persona where id = '" + idb + "'";
         Persona persona = null;
         try {
@@ -141,16 +167,22 @@ public class PersonaDAO {
                     Telefono t = new Telefono(id1, numero, tipo, id);
                     listaTelefonos.add(t);
                 }
-                 persona = new Persona(id, cedula, nombre, listaTelefonos);
-                
+                return new Persona(id, cedula, nombre, listaTelefonos);
             }
-        } catch (SQLException ex) {
-            System.out.println("Error de busqueda :" + ex.getMessage());
+            throw new MyExpetion("Persono no econtrada");
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error buscar Persona por ID", e);
         }
-        return persona;
     }
 
-    public Persona buscarCedula(String ced) {
+    public Persona buscarCedula(String ced) throws MyExpetion {
         String sql = "select * from persona where CEDULA = '" + ced + "'";
         Persona persona = null;
         try {
@@ -171,15 +203,19 @@ public class PersonaDAO {
                     Telefono t = new Telefono(id1, numero, tipo, id);
                     listaTelefonos.add(t);
                 }
-                 persona = new Persona(id, cedula, nombre, listaTelefonos);
-                
+                return new Persona(id, cedula, nombre, listaTelefonos);
             }
-        } catch (SQLException ex) {
-            System.out.println("Error de busqueda cedula :" + ex.getMessage());
+            throw new MyExpetion("Persono no econtrada");
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error buscar Persona por Cedula", e);
         }
-        return persona;
     }
-
-    
 
 }

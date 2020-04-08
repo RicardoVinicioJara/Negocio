@@ -5,10 +5,8 @@
  */
 package DAO;
 
-import Entidades.Persona;
 import Entidades.Telefono;
-import java.awt.Color;
-import java.awt.event.KeyEvent;
+import Utils.MyExpetion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JTextField;
 
 /**
  *
@@ -27,11 +24,17 @@ public class TelefonoDAO {
     Conexion con = new Conexion();
     Connection coneccion;
 
-    public TelefonoDAO() {
-        coneccion = con.getConnection();
+    public TelefonoDAO() throws Exception {
+        try {
+            coneccion = con.getConnection();
+        } catch (Exception e) {
+            System.err.println(e.getCause());
+            throw new Exception("Error de conexion");
+
+        }
     }
 
-    public boolean ingresar(Telefono telefono) {
+    public void ingresar(Telefono telefono) throws MyExpetion {
         try {
             String Query = "INSERT INTO telefono(NUMERO, TIPO, PERSONA_ID)values(?,?,?) ";
             PreparedStatement statement = coneccion.prepareStatement(Query);
@@ -40,27 +43,39 @@ public class TelefonoDAO {
             statement.setString(2, telefono.getTipo());
             statement.setInt(3, telefono.getPersona_id());
             statement.execute();
-            
-            return true;
+
         } catch (SQLException e) {
-            System.out.println("ERROR: INS |" + e.getMessage() + e.getErrorCode());
-            return false;
+            switch (e.getErrorCode()) {
+                case 1062:
+                    throw new MyExpetion("Duplicacion el codigo primario");
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Erro ingreso telefono", e);
         }
     }
 
-    public boolean eliminar(int id) {
+    public void eliminar(int id) throws MyExpetion {
         try {
             String Query = "DELETE from telefono WHERE ID = '" + id + "'";
             Statement se = (Statement) coneccion.createStatement();
             se.executeUpdate(Query);
-            return true;
         } catch (SQLException e) {
-            System.out.println("ERROR: " + e);
-            return false;
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error eliminar telefono", e);
         }
     }
 
-    public boolean actualizar(Telefono telefono) {
+    public void actualizar(Telefono telefono) throws MyExpetion {
         try {
             String Query = "UPDATE telefono SET NUMERO = ?,TIPO = ?, PERSONA_ID  = ? WHERE ID = " + telefono.getId();
             PreparedStatement statement = coneccion.prepareStatement(Query);
@@ -69,14 +84,19 @@ public class TelefonoDAO {
             statement.setString(2, telefono.getTipo());
             statement.setInt(3, telefono.getPersona_id());
             statement.execute();
-            return true;
         } catch (SQLException e) {
-            System.out.println("ERROR ACT: " + e);
-            return false;
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error actualizar telefono", e);
         }
     }
 
-    public List<Telefono> listar(int id) {
+    public List<Telefono> listar(int id) throws MyExpetion {
         List<Telefono> lista = new ArrayList<>();
         String sql = "select * from telefono where persona_id = " + id;
         try {
@@ -89,16 +109,24 @@ public class TelefonoDAO {
                 Telefono t = new Telefono(id1, numero, tipo, id);
                 lista.add(t);
             }
-
-        } catch (SQLException ex) {
-            System.out.println("Error de lectura :" + ex.getMessage());
+            if(lista.isEmpty()){
+                throw new MyExpetion("Lista Vacia de telefonos");
+            }
+            return lista;
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error Listar telefonos", e);
         }
-        return lista;
     }
 
-    public Telefono buscar(int idb) {
+    public Telefono buscar(int idb) throws MyExpetion {
         String sql = "select * from telefono where id = '" + idb + "'";
-        Telefono telefono = null;
         try {
             Statement se1 = coneccion.createStatement();
             ResultSet seter1 = se1.executeQuery(sql);
@@ -106,16 +134,22 @@ public class TelefonoDAO {
                 int id1 = seter1.getInt(1);
                 String numero = seter1.getString(2);
                 String tipo = seter1.getString(3);
-                 telefono = new Telefono(id1, numero, tipo, idb);
+                return new Telefono(id1, numero, tipo, idb);
             }
-
-        } catch (SQLException ex) {
-            System.out.println("Error de lectura :" + ex.getMessage());
+            throw new MyExpetion("Telefono no econtrado por id");
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error Listar telefono por id", e);
         }
-        return telefono;
     }
 
-    public Telefono buscarNumero(String num) {
+    public Telefono buscarNumero(String num) throws MyExpetion {
         String sql = "select * from telefono where numero = '" + num + "'";
         Telefono telefono = null;
         try {
@@ -126,13 +160,18 @@ public class TelefonoDAO {
                 String numero = seter1.getString(2);
                 String tipo = seter1.getString(3);
                 int idp = seter1.getInt(4);
-                 telefono = new Telefono(id1, numero, tipo, idp);
+                return new Telefono(id1, numero, tipo, idp);
             }
-
-        } catch (SQLException ex) {
-            System.out.println("Error de lectura :" + ex.getMessage());
+            throw new MyExpetion("Telefono no econtrado por id");
+        } catch (SQLException e) {
+            switch (e.getErrorCode()) {
+                case 1064:
+                    throw new MyExpetion("Error en sintax en SQL");
+                default:
+                    throw new MyExpetion(e.getMessage(), e);
+            }
+        } catch (Exception e) {
+            throw new MyExpetion("Error Listar telefono por id", e);
         }
-        return telefono;
     }
-
 }

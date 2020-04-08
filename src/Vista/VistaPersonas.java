@@ -8,9 +8,12 @@ package Vista;
 import Entidades.Persona;
 import Entidades.Telefono;
 import Negocio.ContactosON;
+import Utils.MyExpetion;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.eclipse.persistence.jpa.jpql.parser.KeyExpression;
@@ -27,8 +30,8 @@ public class VistaPersonas extends javax.swing.JFrame {
     private List<Telefono> listTelefono;
     public ContactosON contactosON;
     private int codAux;
-
-    public VistaPersonas() {
+    
+    public VistaPersonas() throws Exception {
         initComponents();
         listTelefono = new ArrayList<>();
         contactosON = new ContactosON();
@@ -453,7 +456,7 @@ public class VistaPersonas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarTelefonoActionPerformed
     public boolean validarTelefono() {
-
+        
         if (txtTelefono.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Ingresar un numero de telefono");
             return false;
@@ -464,64 +467,65 @@ public class VistaPersonas extends javax.swing.JFrame {
         }
         return true;
     }
-
+    
     public Telefono addTelefono() {
         return new Telefono(0, txtTelefono.getText(), comboTelefono.getSelectedItem().toString(), 0);
     }
-
+    
     public void limpiarTelefono() {
         txtTelefono.setText("");
         comboTelefono.setSelectedIndex(0);
     }
     private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
-        //        if (evt.getKeyCode() != KeyEvent.VK_DELETE) {
-        //            if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
-        //                evt.consume();
-        //            }
-        //        }
+        if (evt.getKeyCode() != KeyEvent.VK_DELETE) {
+            if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+                evt.consume();
+            }
+        }
     }//GEN-LAST:event_txtTelefonoKeyTyped
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-        //        if (evt.getKeyCode() != KeyEvent.VK_DELETE) {
-        //            if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
-        //                evt.consume();
-        //            }
-        //        }
+        if (evt.getKeyCode() != KeyEvent.VK_DELETE) {
+            if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+                evt.consume();
+            }
+        }
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void panelesCrudClienteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_panelesCrudClienteStateChanged
         int x = panelesCrudCliente.getSelectedIndex();
         if (x == 1) {
-            limpiarTabla();
-            List<Persona> lista = contactosON.listarContactos();
-            if (lista != null) {
+            try {
+                limpiarTablaCotacto();
+                limpiarTabla();
+                List<Persona> lista = contactosON.listarContactos();
                 DefaultTableModel model = (DefaultTableModel) tabla.getModel();
                 int index = 0;
                 for (Persona u : lista) {
                     model.insertRow(index, new Object[]{u.getId(), u.getCedula(), u.getNombre()});
                     index++;
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Lista Vacia");
+            } catch (MyExpetion ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-
+            
         }
     }//GEN-LAST:event_panelesCrudClienteStateChanged
-
+    
     public void limpiarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
         }
     }
-
+    
     public void limpiarTablaCotacto() {
         DefaultTableModel modelo = (DefaultTableModel) tablaContacos.getModel();
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
         }
     }
-
+    
     public void limpiarTablaCotactoB() {
         DefaultTableModel modelo = (DefaultTableModel) tablaContacosB.getModel();
         while (modelo.getRowCount() > 0) {
@@ -532,38 +536,37 @@ public class VistaPersonas extends javax.swing.JFrame {
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         if (validarPersona()) {
             try {
-                if (contactosON.guardadoContacto(addPersona())) {
-                    JOptionPane.showMessageDialog(this, "Contacto Ingresado");
-                    limpiarCrear();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error");
-                }
+                contactosON.guardadoContacto(addPersona());
+                JOptionPane.showMessageDialog(this, "Contacto Ingresado");
+                limpiarCrear();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(this, e.getMessage());
             }
-
+            
         }
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
-        List<Telefono> lista = contactosON.listarTelefonos(Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0) + ""));
-        limpiarTablaCotacto();
-        if (lista != null) {
+        try {
+            List<Telefono> lista = contactosON.listarTelefonos(Integer.valueOf(tabla.getValueAt(tabla.getSelectedRow(), 0) + ""));
+            limpiarTablaCotacto();
             DefaultTableModel model = (DefaultTableModel) tablaContacos.getModel();
             int index = 0;
             for (Telefono u : lista) {
                 model.insertRow(index, new Object[]{u.getId(), u.getNumero(), u.getTipo()});
                 index++;
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Esta persona no tiene telefonos");
+        } catch (MyExpetion ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
+
     }//GEN-LAST:event_tablaMouseClicked
 
     private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            Persona p = contactosON.buscarPersonaCedula(txtBuscar.getText());
-            if (p != null) {
+            
+            try {
+                Persona p = contactosON.buscarPersonaCedula(txtBuscar.getText());
                 codAux = p.getId();
                 txtNombreB.setText(p.getNombre());
                 txtCedulaB.setText(p.getCedula());
@@ -583,10 +586,11 @@ public class VistaPersonas extends javax.swing.JFrame {
                     btnEliminar.setEnabled(true);
                     btnActualizar.setEnabled(true);
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Persona no econtrada");
+            } catch (MyExpetion ex) {
                 limpiarBuscar();
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
+            
         }
     }//GEN-LAST:event_txtBuscarKeyPressed
 
@@ -596,11 +600,13 @@ public class VistaPersonas extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         if (JOptionPane.showConfirmDialog(this, "Seguro desea Eliminar") == JOptionPane.OK_OPTION) {
-            Persona p = contactosON.buscarPersonaCedula(txtCedulaB.getText());
-            if (contactosON.eliminarPersona(p)) {
+            try {
+                Persona p = contactosON.buscarPersonaCedula(txtCedulaB.getText());
+                contactosON.eliminarPersona(p);
                 limpiarBuscar();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se puede eliminar");
+                JOptionPane.showMessageDialog(this, "Persona Eliminada");
+            } catch (MyExpetion e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -621,16 +627,13 @@ public class VistaPersonas extends javax.swing.JFrame {
             txtNombreB.setEditable(true);
             tablaContacosB.setEnabled(true);
         } else {
-            Persona p = new Persona(codAux, txtCedulaB.getText(), txtNombreB.getText(), listaTelefonos());
             try {
-                if (contactosON.actualizarContacto(p)) {
-                    JOptionPane.showMessageDialog(this, "Persona Actualizada");
-                    limpiarBuscar();
-                }else{
-                    JOptionPane.showMessageDialog(this, "Error en Actualizar");
-                }
-            } catch (Exception e) {
-                System.out.println(e);
+                Persona p = new Persona(codAux, txtCedulaB.getText(), txtNombreB.getText(), listaTelefonos());
+                contactosON.actualizarContacto(p);
+                JOptionPane.showMessageDialog(this, "Persona Actualizada");
+                limpiarBuscar();
+            } catch (MyExpetion e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
             }
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
@@ -639,8 +642,9 @@ public class VistaPersonas extends javax.swing.JFrame {
         txtCedula.setText("");
         txtNombre.setText("");
         limpiarTelefono();
+        comboTelefono.setSelectedIndex(0);
     }
-
+    
     public List<Telefono> listaTelefonos() {
         List<Telefono> lista = new ArrayList<>();
         for (int i = 0; i < tablaContacosB.getRowCount(); i++) {
@@ -651,11 +655,11 @@ public class VistaPersonas extends javax.swing.JFrame {
         }
         return lista;
     }
-
+    
     public Persona addPersona() {
         return new Persona(0, txtCedula.getText(), txtNombre.getText(), listTelefono);
     }
-
+    
     public boolean validarPersona() {
         if (txtCedula.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Ingres una cedula");
@@ -702,7 +706,11 @@ public class VistaPersonas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VistaPersonas().setVisible(true);
+                try {
+                    new VistaPersonas().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(VistaPersonas.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
