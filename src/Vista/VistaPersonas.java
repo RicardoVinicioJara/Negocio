@@ -537,6 +537,7 @@ public class VistaPersonas extends javax.swing.JFrame {
         if (validarPersona()) {
             try {
                 contactosON.guardadoContacto(addPersona());
+                
                 JOptionPane.showMessageDialog(this, "Contacto Ingresado");
                 limpiarCrear();
             } catch (Exception e) {

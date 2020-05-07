@@ -5,39 +5,81 @@
  */
 package Entidades;
 
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
- * @author vinic
+ * @author Vinicio
  */
-public class Telefono {
-    private int id;
-    private String  numero;
-    private String tipo;    
-    private int persona_id;
+@Entity
+@Table(name = "telefono")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Telefono.findAll", query = "SELECT t FROM Telefono t"),
+    @NamedQuery(name = "Telefono.findById", query = "SELECT t FROM Telefono t WHERE t.id = :id"),
+    @NamedQuery(name = "Telefono.findByNumero", query = "SELECT t FROM Telefono t WHERE t.numero = :numero")})
+public class Telefono implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @Basic(optional = false)
+    @Column(name = "numero")
+    private int numero;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "tipo")
+    private String tipo;
+    @JoinColumn(name = "persona_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Persona personaId;
 
     public Telefono() {
     }
 
-    public Telefono(int id, String nombre, String tipo, int persona_id) {
+    public Telefono(Integer id) {
         this.id = id;
-        this.numero = nombre;
-        this.tipo = tipo;
-        this.persona_id = persona_id;
     }
 
-    public int getId() {
+    public Telefono(Integer id, int numero, String tipo) {
+        this.id = id;
+        this.numero = numero;
+        this.tipo = tipo;
+    }
+
+    public Telefono(int id1, String numero, String tipo, int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getNumero() {
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
@@ -49,12 +91,37 @@ public class Telefono {
         this.tipo = tipo;
     }
 
-    public int getPersona_id() {
-        return persona_id;
+    public Persona getPersonaId() {
+        return personaId;
     }
 
-    public void setPersona_id(int persona_id) {
-        this.persona_id = persona_id;
+    public void setPersonaId(Persona personaId) {
+        this.personaId = personaId;
     }
-            
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Telefono)) {
+            return false;
+        }
+        Telefono other = (Telefono) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Entidades.Telefono[ id=" + id + " ]";
+    }
+    
 }
